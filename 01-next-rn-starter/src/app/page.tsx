@@ -1,11 +1,12 @@
 import { Button } from "antd";
 
 export default function Home() {
-  return (
-    <div>hello world nextjs with hoidanit
-      <div>
-        <Button type="primary" > Add new</Button>
-      </div>
-    </div>
-  );
+    return (
+        <div>
+            hello world nextjs with hoidanit
+            <div>
+                <Button type="primary">xin chào</Button>
+            </div>
+        </div>
+    );
 }
