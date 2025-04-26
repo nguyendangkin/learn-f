@@ -120,7 +120,7 @@ export class UsersService {
     });
 
     //send email
-    this.mailerService.sendMail({
+    await this.mailerService.sendMail({
       to: user.email, // list of receivers
       subject: 'Activate your account at @hoidanit ✔', // Subject line
       template: 'register',
