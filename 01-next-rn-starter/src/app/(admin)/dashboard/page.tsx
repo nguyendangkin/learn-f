@@ -1,7 +1,11 @@
-"use client";
+import AdminCard from "@/components/admin/admin.card";
 
-const Dashboard: React.FC = () => {
-    return <div>dashboard page 3</div>;
+const DashboardPage = () => {
+    return (
+        <div>
+            <AdminCard />
+        </div>
+    );
 };
 
-export default Dashboard;
+export default DashboardPage;

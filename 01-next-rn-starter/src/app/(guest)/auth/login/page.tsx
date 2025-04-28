@@ -1,5 +1,9 @@
-import LoginUI from "@/components/auth/login";
+import Login from "@/components/auth/login";
 
-export default function Login() {
-    return <LoginUI />;
+const LoginPage = () => {
+    return (
+        <Login />
+    )
 }
+
+export default LoginPage;

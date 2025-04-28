@@ -1,5 +1,9 @@
-import RegisterUI from "@/components/auth/register";
+import Register from "@/components/auth/register";
 
-export default function Register() {
-    return <RegisterUI />;
+const RegisterPage = () => {
+    return (
+        <Register />
+    )
 }
+
+export default RegisterPage;

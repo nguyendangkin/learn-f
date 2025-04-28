@@ -1,12 +1,9 @@
-import { Button } from "antd";
+import HomePage from "@/components/layout/homepage";
 
 export default function Home() {
-    return (
-        <div>
-            hello world nextjs with hoidanit
-            <div>
-                <Button type="primary">xin chào</Button>
-            </div>
-        </div>
-    );
+  return (
+    <div>
+      <HomePage />
+    </div>
+  );
 }

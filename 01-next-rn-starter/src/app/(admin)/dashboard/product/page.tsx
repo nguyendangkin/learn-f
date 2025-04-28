@@ -1,3 +1,9 @@
-export default function ManageProductPage() {
-    return <div>ManageProductPage</div>;
+const ManageProductPage = () => {
+    return (
+        <div>
+            ManageProductPage page
+        </div>
+    )
 }
+
+export default ManageProductPage;
