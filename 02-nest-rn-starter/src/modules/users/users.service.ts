@@ -7,7 +7,11 @@ import { Model } from 'mongoose';
 import { hashPasswordHelper } from '@/helpers/util';
 import aqp from 'api-query-params';
 import mongoose from 'mongoose';
-import { CodeAuthDto, CreateAuthDto } from '@/auth/dto/create-auth.dto';
+import {
+  ChangePasswordAuthDto,
+  CodeAuthDto,
+  CreateAuthDto,
+} from '@/auth/dto/create-auth.dto';
 import { v4 as uuidv4 } from 'uuid';
 import dayjs from 'dayjs';
 import { MailerService } from '@nestjs-modules/mailer';
@@ -194,5 +198,62 @@ export class UsersService {
     });
 
     return { _id: user._id };
+  }
+
+  async retryPassword(email: string) {
+    // check email
+    const user = await this.userModal.findOne({ email });
+    if (!user) {
+      throw new BadRequestException('Tài khoản không tồn tại');
+    }
+
+    //send email
+    const codeId = uuidv4();
+
+    // update user
+    await user.updateOne({
+      codeId: codeId,
+      codeExpired: dayjs().add(5, 'minutes'),
+    });
+
+    // send email
+    await this.mailerService.sendMail({
+      to: user.email, // list of receivers
+      subject: 'Change your password account at @hoidanit ✔', // Subject line
+      template: 'register',
+      context: {
+        name: user?.name ?? user.email,
+        activationCode: codeId,
+      },
+    });
+
+    return { _id: user._id, email: user.email };
+  }
+
+  async changePassword(data: ChangePasswordAuthDto) {
+    if (data.confirmPassword !== data.password) {
+      throw new BadRequestException(
+        'Mật khẩu và xác nhận mật khẩu không chính xác',
+      );
+    }
+    // check email
+    const user = await this.userModal.findOne({ email: data.email });
+    if (!user) {
+      throw new BadRequestException('Tài khoản không tồn tại');
+    }
+
+    //check expire code
+    const isBeforeCheck = dayjs().isBefore(user.codeExpired);
+    if (isBeforeCheck) {
+      // valid => update password
+      const newPassword = await hashPasswordHelper(data.password);
+      await user.updateOne({
+        password: newPassword,
+      });
+
+      return { isBeforeCheck };
+    } else {
+      throw new BadRequestException('Mã code không hợp lệ hoặc đã hết hạn');
+    }
   }
 }

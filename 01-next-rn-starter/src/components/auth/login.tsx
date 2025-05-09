@@ -1,16 +1,19 @@
-"use client";
-import { Button, Col, Divider, Form, Input, notification, Row } from "antd";
-import { ArrowLeftOutlined } from "@ant-design/icons";
-import Link from "next/link";
-import { authenticate } from "@/utils/actions";
-import { useRouter } from "next/navigation";
-import ModalReactive from "@/components/auth/modal.reactive";
-import { useState } from "react";
+'use client'
+import { Button, Col, Divider, Form, Input, notification, Row } from 'antd';
+import { ArrowLeftOutlined } from '@ant-design/icons';
+import Link from 'next/link';
+import { authenticate } from '@/utils/actions';
+import { useRouter } from 'next/navigation';
+import ModalReactive from './modal.reactive';
+import { useState } from 'react';
+import ModalChangePassword from './modal.change.password';
 
 const Login = () => {
     const router = useRouter();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [userEmail, setUserEmail] = useState("");
+
+    const [changePassword, setChangePassword] = useState(false);
 
     const onFinish = async (values: any) => {
         const { username, password } = values;
@@ -21,18 +24,18 @@ const Login = () => {
         if (res?.error) {
             //error
             if (res?.code === 2) {
-                // router.push("/verify");
                 setIsModalOpen(true);
                 setUserEmail(username);
                 return;
             }
             notification.error({
                 message: "Error login",
-                description: res?.error,
-            });
+                description: res?.error
+            })
+
         } else {
             //redirect to /dashboard
-            router.push("/dashboard");
+            router.push('/dashboard');
         }
     };
 
@@ -40,20 +43,18 @@ const Login = () => {
         <>
             <Row justify={"center"} style={{ marginTop: "30px" }}>
                 <Col xs={24} md={16} lg={8}>
-                    <fieldset
-                        style={{
-                            padding: "15px",
-                            margin: "5px",
-                            border: "1px solid #ccc",
-                            borderRadius: "5px",
-                        }}
-                    >
+                    <fieldset style={{
+                        padding: "15px",
+                        margin: "5px",
+                        border: "1px solid #ccc",
+                        borderRadius: "5px"
+                    }}>
                         <legend>Đăng Nhập</legend>
                         <Form
                             name="basic"
                             onFinish={onFinish}
                             autoComplete="off"
-                            layout="vertical"
+                            layout='vertical'
                         >
                             <Form.Item
                                 label="Email"
@@ -61,7 +62,7 @@ const Login = () => {
                                 rules={[
                                     {
                                         required: true,
-                                        message: "Please input your email!",
+                                        message: 'Please input your email!',
                                     },
                                 ]}
                             >
@@ -74,26 +75,33 @@ const Login = () => {
                                 rules={[
                                     {
                                         required: true,
-                                        message: "Please input your password!",
+                                        message: 'Please input your password!',
                                     },
                                 ]}
                             >
                                 <Input.Password />
                             </Form.Item>
 
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit">
-                                    Login
-                                </Button>
+
+
+                            <Form.Item
+                            >
+                                <div style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "center"
+                                }}>
+                                    <Button type="primary" htmlType="submit">
+                                        Login
+                                    </Button>
+                                    <Button type='link' onClick={() => setChangePassword(true)}>Quên mật khẩu ?</Button>
+                                </div>
                             </Form.Item>
                         </Form>
-                        <Link href={"/"}>
-                            <ArrowLeftOutlined /> Quay lại trang chủ
-                        </Link>
+                        <Link href={"/"}><ArrowLeftOutlined /> Quay lại trang chủ</Link>
                         <Divider />
                         <div style={{ textAlign: "center" }}>
-                            Chưa có tài khoản?{" "}
-                            <Link href={"/auth/register"}>Đăng ký tại đây</Link>
+                            Chưa có tài khoản? <Link href={"/auth/register"}>Đăng ký tại đây</Link>
                         </div>
                     </fieldset>
                 </Col>
@@ -103,8 +111,12 @@ const Login = () => {
                 setIsModalOpen={setIsModalOpen}
                 userEmail={userEmail}
             />
+            <ModalChangePassword
+                isModalOpen={changePassword}
+                setIsModalOpen={setChangePassword}
+            />
         </>
-    );
-};
+    )
+}
 
 export default Login;
